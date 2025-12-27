@@ -1,0 +1,219 @@
+/* Nav.css */
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 80px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Logo */
+.log {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #000;
+  font-family: system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.5px;
+}
+
+/* Navigation */
+.links {
+  display: flex;
+  gap: 50px;
+}
+
+.links a {
+  text-decoration: none;
+  color: #818589;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.3s;
+  position: relative;
+  padding: 5px 0;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.links a:hover {
+  color: #000;
+}
+
+.links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: orange;
+  transition: width 0.3s ease;
+}
+
+.links a:hover::after {
+  width: 100%;
+}
+
+/* Actions */
+.left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Shop Icon */
+.shop-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.shop {
+  font-size: 2rem;
+  color: #000;
+  cursor: pointer;
+  padding: 5px;
+  transition: all 0.3s;
+  border-radius: 10px;
+}
+
+.shop:hover {
+  background-color: orange;
+  color: white;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  background: orange;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Connexion Button */
+.connexion {
+  padding: 10px 20px;
+  border: 2px solid #000;
+  color: #000;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.connexion:hover {
+  background-color: #000;
+  color: white;
+}
+
+.connexion span {
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .nav {
+    padding: 20px 40px;
+  }
+  
+  .links {
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav {
+    padding: 15px 20px;
+  }
+  
+  .links {
+    gap: 20px;
+  }
+  
+  .log {
+    font-size: 1.5rem;
+  }
+  
+  .shop {
+    font-size: 1.8rem;
+  }
+  
+  .connexion {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+}
+/* Dans votre App.css ou global CSS */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Style pour les liens de la navbar */
+.nav-link {
+  background: none;
+  border: none;
+  color: #818589;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 5px 0;
+  position: relative;
+  font-family: system-ui, -apple-system, sans-serif;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  color: #000;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: orange;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .nav {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .left {
+    width: 100%;
+    justify-content: center;
+  }
+}

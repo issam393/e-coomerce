@@ -1,0 +1,10 @@
+/Users/issamouladsmane/Desktop/ECommerceApp/backend/src/main/java/com/ecommerce/CreateAdmin.java
+/Users/issamouladsmane/Desktop/ECommerceApp/backend/src/main/java/com/ecommerce/dao/UserDAO.java
+/Users/issamouladsmane/Desktop/ECommerceApp/backend/src/main/java/com/ecommerce/controller/LoginServlet.java
+/Users/issamouladsmane/Desktop/ECommerceApp/backend/src/main/java/com/ecommerce/controller/LogoutServlet.java
+/Users/issamouladsmane/Desktop/ECommerceApp/backend/src/main/java/com/ecommerce/model/User.java
+/Users/issamouladsmane/Desktop/ECommerceApp/backend/src/main/java/com/ecommerce/util/DBConnection.java
+/Users/issamouladsmane/Desktop/ECommerceApp/backend/src/main/java/com/ecommerce/controller/sendVerificationEmail.java
+/Users/issamouladsmane/Desktop/ECommerceApp/backend/src/main/java/com/ecommerce/filter/AdminFilter.java
+/Users/issamouladsmane/Desktop/ECommerceApp/backend/src/main/java/com/ecommerce/controller/SignupServlet.java
+/Users/issamouladsmane/Desktop/ECommerceApp/backend/src/main/java/com/ecommerce/controller/VerificationServlet.java

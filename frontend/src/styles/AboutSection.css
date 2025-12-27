@@ -1,0 +1,334 @@
+/* AboutSection.css */
+
+/* Variables CSS avec les nouvelles couleurs */
+:root {
+  --color-background: #f8f5f0; /* Beige clair */
+  --color-primary: #CC5500; /* Orange principal */
+  --color-primary-light: rgba(204, 85, 0, 0.1);
+  --color-primary-medium: rgba(204, 85, 0, 0.3);
+  --color-foreground: #1a1a1a; /* Texte foncé */
+  --color-muted: #666666; /* Texte secondaire */
+  --color-muted-light: #999999; /* Texte tertiaire */
+  --color-card: #ffffff; /* Fond des cartes */
+  --color-card-border: rgba(0, 0, 0, 0.05);
+  --color-accent-1: #e6d8c3; /* Beige moyen */
+  --color-accent-2: #d4c4a8; /* Beige foncé */
+}
+
+/* Base Styles */
+.about-section {
+  padding: 80px 0;
+  background-color: var(--color-background);
+  overflow: hidden;
+  position: relative;
+}
+
+.about-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.about-content-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+/* Left Content */
+.about-content-left {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.section-subtitle {
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: 'Montserrat', -apple-system, sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--color-foreground);
+  line-height: 1.2;
+  margin: 16px 0 24px 0;
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, var(--color-primary), #E67E22);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.about-description {
+  margin-top: 32px;
+}
+
+.about-description p {
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--color-muted);
+  margin-bottom: 20px;
+  max-width: 600px;
+}
+
+/* Stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.stat-item {
+  padding: 24px;
+  background: var(--color-card);
+  border-radius: 16px;
+  border: 1px solid var(--color-card-border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-primary-medium);
+}
+
+.stat-number {
+  font-family: 'Montserrat', -apple-system, sans-serif;
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--color-primary);
+  display: block;
+  line-height: 1;
+}
+
+.stat-label {
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 14px;
+  color: var(--color-muted);
+  margin-top: 8px;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+/* Right Visual */
+.about-visual-right {
+  position: relative;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.visual-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  position: relative;
+  z-index: 10;
+}
+
+.grid-column-left,
+.grid-column-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.grid-column-right {
+  padding-top: 48px;
+}
+
+.visual-box {
+  border-radius: 24px;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.visual-box:hover {
+  transform: scale(1.02);
+}
+
+.visual-box-1 {
+  height: 192px;
+  background: linear-gradient(135deg, var(--color-primary), #E67E22);
+  animation: float 6s ease-in-out infinite;
+}
+
+.visual-box-2 {
+  height: 256px;
+  background: linear-gradient(135deg, var(--color-accent-1), var(--color-accent-2));
+}
+
+.visual-box-3 {
+  height: 256px;
+  background: linear-gradient(135deg, #ffffff, var(--color-accent-1));
+}
+
+.visual-box-4 {
+  height: 192px;
+  background: linear-gradient(135deg, rgba(204, 85, 0, 0.6), rgba(230, 126, 34, 0.6));
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+/* Decorative Circles */
+.decorative-circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(64px);
+  z-index: 1;
+  opacity: 0.7;
+}
+
+.circle-top-right {
+  top: -40px;
+  right: -40px;
+  width: 160px;
+  height: 160px;
+  background: var(--color-primary-light);
+}
+
+.circle-bottom-left {
+  bottom: -40px;
+  left: -40px;
+  width: 240px;
+  height: 240px;
+  background: rgba(230, 126, 34, 0.1);
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+.delay-1 {
+  animation-delay: 1s;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.fade-in-up.delay {
+  animation-delay: 0.2s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (min-width: 1024px) {
+  .about-content-wrapper {
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+  }
+  
+  .section-title {
+    font-size: 56px;
+  }
+  
+  .stat-number {
+    font-size: 48px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .about-content-wrapper {
+    gap: 48px;
+  }
+  
+  .section-title {
+    font-size: 40px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+  }
+  
+  .visual-grid {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .about-section {
+    padding: 60px 0;
+  }
+  
+  .about-container {
+    padding: 0 20px;
+  }
+  
+  .section-title {
+    font-size: 32px;
+  }
+  
+  .about-description p {
+    font-size: 16px;
+  }
+  
+  .visual-box-1,
+  .visual-box-4 {
+    height: 160px;
+  }
+  
+  .visual-box-2,
+  .visual-box-3 {
+    height: 200px;
+  }
+  
+  .stat-number {
+    font-size: 36px;
+  }
+}
+
+/* Loading State */
+.about-section.loading {
+  opacity: 0;
+}
+
+.about-section.loaded {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+/* Améliorations pour le beige clair */
+.stat-item {
+  backdrop-filter: blur(10px);
+}
+
+.visual-box {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
