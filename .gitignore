@@ -1,0 +1,17 @@
+# ===== Backend Java =====
+backend/target/
+backend/src/main/webapp/WEB-INF/lib/
+*.class
+*.jar
+
+# ===== Frontend =====
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+# ===== IDE =====
+.vscode/
+.idea/
+
+# ===== OS =====
+.DS_Store
