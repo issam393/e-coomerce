@@ -1,15 +1,13 @@
 .hero {
-    height: 700px;
+    height: 900px;
     padding: 80px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-  
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
   }
-  
   /* ÉDITION LIMITÉE */
   .edition {
     color: #ff7a00;

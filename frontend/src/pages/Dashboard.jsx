@@ -53,6 +53,8 @@ const Dashboard = () => {
     { id: 'cart', label: 'Mon Panier', icon: ShoppingCart, badge: cart.length },
     { id: 'profile', label: 'Mon Profil', icon: User },
   ];
+  
+  
 
   return (
     <div className="dashboard">
@@ -67,12 +69,6 @@ const Dashboard = () => {
               URBANE
             </button>
             <div className="header-right">
-              <div className="user-info">
-                <div className="user-avatar">
-                  {mockProfile.name.charAt(0)}
-                </div>
-                <span className="user-name">{mockProfile.name}</span>
-              </div>
               <button 
                 onClick={() => window.location.href = '/'}
                 className="logout-btn"
@@ -144,9 +140,6 @@ const Dashboard = () => {
                         </div>
                         <div className="order-right">
                           <span className="order-total">{order.total}</span>
-                          <button className="order-detail-btn">
-                            Voir détails
-                          </button>
                         </div>
                       </div>
                     </div>
@@ -251,10 +244,6 @@ const Dashboard = () => {
                 <div className="profile-card">
                   <div className="profile-header">
                     <h3 className="profile-section-title">Informations Personnelles</h3>
-                    <button className="edit-btn">
-                      <Edit2 className="icon-sm" />
-                      <span>Modifier</span>
-                    </button>
                   </div>
                   
                   <div className="profile-grid">
