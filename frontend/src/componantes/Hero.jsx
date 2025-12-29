@@ -13,20 +13,33 @@ import client9 from "../assets/client9.jpg";
 import client10 from "../assets/client10.jpg";
 
 const testimonials = [
-  { id: 1, name: "Alice", text: "J'adore ces vêtements, le confort est incroyable et le style est parfait pour toutes les occasions.", avatar: client1 },
-  { id: 2, name: "Mohamed", text: "Le streetwear noir est exactement ce que je cherchais, la qualité est irréprochable et la livraison rapide.", avatar: client2 },
-  { id: 3, name: "Sarah", text: "Hoodies et jeans très confortables, j'apprécie vraiment le soin apporté aux détails et aux finitions.", avatar: client3 },
-  { id: 4, name: "Karim", text: "Livraison rapide et produit conforme à la description, je recommande cette boutique à tous mes amis.", avatar: client4 },
-  { id: 5, name: "Lina", text: "Très satisfait de mon achat, les articles sont stylés et durables, je reviendrai certainement.", avatar: client5 },
-  { id: 6, name: "Youssef", text: "Qualité exceptionnelle et service client au top, je ne peux que recommander cette marque.", avatar: client6 },
-  { id: 7, name: "Emma", text: "Le design et le confort se marient parfaitement, chaque pièce est unique et agréable à porter.", avatar: client7 },
-  { id: 8, name: "Lucas", text: "Articles de haute qualité, livraison rapide et packaging soigné, je suis impressionné.", avatar: client8 },
-  { id: 9, name: "Chloé", text: "J'aime beaucoup cette collection, elle allie style, confort et durabilité de manière exceptionnelle.", avatar: client9 },
-  { id: 10, name: "Maxime", text: "Tout est parfait, des matériaux aux finitions, je suis très satisfait de mon expérience d'achat.", avatar: client10 },
+  { id: 1, name: "Alice", text: "J'adore ces vêtements, le confort est incroyable et le style est parfait .", avatar: client1, rating: 5 },
+  { id: 2, name: "Mohamed", text: "Le streetwear noir est exactement ce que je cherchais, la qualité est irréprochable.", avatar: client2, rating: 5 },
+  { id: 3, name: "Sarah", text: "Hoodies et jeans très confortables, j'apprécie vraiment le soin apporté aux détails et aux finitions.", avatar: client3, rating: 4 },
+  { id: 4, name: "Karim", text: "Livraison rapide et produit conforme à la description, je recommande cette boutique à tous mes amis.", avatar: client4, rating: 5 },
+  { id: 5, name: "Lina", text: "Très satisfait de mon achat, les articles sont stylés et durables, je reviendrai certainement.", avatar: client5, rating: 5 },
+  { id: 6, name: "Youssef", text: "Qualité exceptionnelle et service client au top, je ne peux que recommander cette marque.", avatar: client6, rating: 5 },
+  { id: 7, name: "Emma", text: "Le design et le confort se marient parfaitement, chaque pièce est unique et agréable à porter.", avatar: client7, rating: 4 },
+  { id: 8, name: "Lucas", text: "Articles de haute qualité, livraison rapide et packaging soigné, je suis impressionné.", avatar: client8, rating: 5 },
+  { id: 9, name: "Chloé", text: "J'aime beaucoup cette collection, elle allie style, confort et durabilité de manière exceptionnelle.", avatar: client9, rating: 5 },
+  { id: 10, name: "Maxime", text: "Tout est parfait, des matériaux aux finitions, je suis très satisfait de mon expérience d'achat.", avatar: client10, rating: 5 },
 ];
 
 // Dupliquer pour un défilement infini
 const duplicatedTestimonials = [...testimonials, ...testimonials];
+
+// Composant étoiles
+const StarRating = ({ rating }) => {
+  return (
+    <div className="stars">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <span key={star} className={star <= rating ? "filled" : ""}>
+          ★
+        </span>
+      ))}
+    </div>
+  );
+};
 
 function Hero() {
   return (
@@ -46,6 +59,7 @@ function Hero() {
               <img className="avatar" src={testimonial.avatar} alt={testimonial.name} />
               <div className="name">{testimonial.name}</div>
               <div className="comment">{testimonial.text}</div>
+              <StarRating rating={testimonial.rating} />
             </div>
           ))}
         </div>
@@ -56,6 +70,7 @@ function Hero() {
               <img className="avatar" src={testimonial.avatar} alt={testimonial.name} />
               <div className="name">{testimonial.name}</div>
               <div className="comment">{testimonial.text}</div>
+              <StarRating rating={testimonial.rating} />
             </div>
           ))}
         </div>

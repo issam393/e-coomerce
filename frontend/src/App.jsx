@@ -19,7 +19,6 @@ function App() {
       <AboutSection />
       <NewsletterSection />
       <Footer />
-  
     </>
   )
 }
