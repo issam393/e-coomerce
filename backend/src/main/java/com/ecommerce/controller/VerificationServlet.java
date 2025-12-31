@@ -1,5 +1,5 @@
-
 package com.ecommerce.controller;
+
 import java.io.IOException;
 
 import com.ecommerce.dao.UserDAO;
@@ -11,8 +11,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
 /**
- * Servlet pour gérer la vérification des utilisateurs
+ * Servlet pour gérer la vérification du compte utilisateur
  */
 @WebServlet("/verify")
 public class VerificationServlet extends HttpServlet {
@@ -28,37 +29,52 @@ public class VerificationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // ✅ Code saisi par l'utilisateur
         String inputCode = request.getParameter("verificationCode");
-        HttpSession session = request.getSession();
-        User tempUser = (User) session.getAttribute("vrificationCode"); // utilisateur temporaire depuis signup
-        System.out.println("Code entré : " + inputCode);
-        if (tempUser == null) {
-            response.sendRedirect("../signup.jsp");
+
+        HttpSession session = request.getSession(false); // ✅ éviter créer une session inutile
+        if (session == null) {
+            response.sendRedirect("signup.jsp");
             return;
         }
+
+        // ✅ Utilisateur temporaire stocké après signup
+        User tempUser = (User) session.getAttribute("verificationUser"); // 🔁 NOM CORRIGÉ
+
+        if (tempUser == null || inputCode == null || inputCode.isEmpty()) {
+            response.sendRedirect("VerificationCode/VerificationPage.jsp?error=invalid");
+            return;
+        }
+
+        System.out.println("Code entré : " + inputCode);
         System.out.println("Code attendu : " + tempUser.getVerificationCode());
-        // Vérifier le code
+
+        // ✅ Vérification du code
         if (tempUser.getVerificationCode().equals(inputCode)) {
-            tempUser.setVerified(true);
+
+            tempUser.setVerified(true);              // ✅ compte vérifié
+            tempUser.setStatus("ACTIVE");            // ✅ activation du compte
 
             try {
-                // Sauvegarder l'utilisateur vérifié dans la DB
+                // ✅ Sauvegarde définitive en base
                 userDAO.saveUser(tempUser);
 
-                // Créer session définitive pour l'utilisateur
+                // ✅ Création de la session utilisateur finale
                 session.setAttribute("email", tempUser.getEmail());
                 session.setAttribute("role", tempUser.getRole());
 
-                // Supprimer l'utilisateur temporaire de la session
-                session.removeAttribute("vrificationCode");
+                // ✅ Nettoyage de la session temporaire
+                session.removeAttribute("verificationUser");
 
                 response.sendRedirect("LandingPage.jsp");
+
             } catch (Exception e) {
-                throw new ServletException("Erreur lors de la sauvegarde de l'utilisateur", e);
+                throw new ServletException("Erreur lors de la vérification du compte", e);
             }
 
         } else {
-            response.getWriter().println("Code incorrect !");
+            // ❌ Code incorrect
+            response.sendRedirect("VerificationCode/VerificationPage.jsp?error=code");
         }
     }
 }

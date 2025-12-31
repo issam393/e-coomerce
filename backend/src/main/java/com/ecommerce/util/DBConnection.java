@@ -4,24 +4,22 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DBConnection{
+public class DBConnection {
 
-    public final static String DB_URL = "jdbc:mysql://localhost:3306/name";
-    public final static String USER = "root";
-    public final static String PASS = "pass";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/ecommerce?useSSL=false&serverTimezone=UTC";
+    private static final String USER = "root";
+    private static final String PASS = "CHANGE_ME"; // 🔐 à externaliser
 
-    public static Connection getConnection()  {
-        try{
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.println("✅ Connexion à la base réussie !");
-            return conn;
-        }catch(SQLException e){
-            System.err.println("❌ Impossible de se connecter à la base : " + e.getMessage());
-            return null; 
+    static {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            System.out.println("✅ Driver MySQL chargé");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("❌ Driver MySQL introuvable", e);
         }
     }
-    public static void main(String[] args) {
-        getConnection();
+
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(DB_URL, USER, PASS);
     }
-    
 }
