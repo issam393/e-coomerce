@@ -28,10 +28,10 @@ public class AdminFilter implements Filter {
         HttpSession session = req.getSession(false);
 
         // Si pas connecté ou pas admin → redirige vers login
-        if (session == null || !"admin".equals(session.getAttribute("role"))) {
+        if (session == null || !"ADMIN".equals(session.getAttribute("role"))) {
             res.sendRedirect(req.getContextPath() + "/login.jsp");
             return;
-        }
+        }        
 
         // Sinon continue
         chain.doFilter(request, response);

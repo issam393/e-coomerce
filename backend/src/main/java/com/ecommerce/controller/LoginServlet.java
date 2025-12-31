@@ -22,17 +22,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-
-/**
- * Servlet pour gérer le login
- */
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
     private UserDAO userDAO;
 
-    // Clé JWT fixe pour ne pas la recréer à chaque login
-    private static final SecretKey JWT_KEY = 
+    // ✅ Clé JWT fixe
+    private static final SecretKey JWT_KEY =
         Keys.hmacShaKeyFor("12345678901234567890123456789012".getBytes());
 
     @Override
@@ -49,28 +45,37 @@ public class LoginServlet extends HttpServlet {
 
         try {
             User user = userDAO.getUserByEmail(email);
-             System.out.println("Utilisateur cherché : " + email);
 
+            // ✅ 1️⃣ Vérifier si l'utilisateur existe (AJOUT)
             if (user == null) {
                 response.sendRedirect("login.jsp?error=email");
-                System.out.println("Utilisateur non trouvé pour : " + email);
                 return;
             }
-           System.out.println("Utilisateur trouvé : " + user.getEmail());
-           
+
+            // ✅ 2️⃣ Vérifier si le compte est vérifié (AJOUT)
+            if (!user.isVerified()) {
+                response.sendRedirect("login.jsp?error=not_verified");
+                return;
+            }
+
+            // ✅ 3️⃣ Vérifier si le compte est bloqué (AJOUT)
+            if ("BLOCKED".equalsIgnoreCase(user.getStatus())) {
+                response.sendRedirect("login.jsp?error=blocked");
+                return;
+            }
+
+            // ✅ 4️⃣ Vérifier le mot de passe
             if (!BCrypt.checkpw(password, user.getPassword())) {
                 response.sendRedirect("login.jsp?error=password");
                 return;
             }
-            System.out.println("Mot de passe correct pour : " + user.getEmail());
-            // ✅ Création de la session
+
+            // ✅ 5️⃣ Création de la session
             HttpSession session = request.getSession();
             session.setAttribute("email", user.getEmail());
             session.setAttribute("role", user.getRole());
-            
-            System.out.println("Session créée pour : " + user.getEmail() + " avec rôle " + user.getRole());
 
-            // ✅ Option : générer un JWT (pour futur API)
+            // ✅ 6️⃣ Génération du JWT
             long expiration = 1000 * 60 * 60 * 24; // 1 jour
             String jwtToken = Jwts.builder()
                     .setSubject(user.getEmail())
@@ -81,19 +86,16 @@ public class LoginServlet extends HttpServlet {
                     .compact();
 
             Cookie jwtCookie = new Cookie("jwtToken", jwtToken);
-            jwtCookie.setMaxAge(24 * 60 * 60);
             jwtCookie.setHttpOnly(true);
+            jwtCookie.setMaxAge(24 * 60 * 60);
             jwtCookie.setPath("/");
             response.addCookie(jwtCookie);
-         
 
-            // ✅ Redirection selon le rôle
-            if ("admin".equals(user.getRole())) {
+            // ✅ 7️⃣ Redirection selon le rôle
+            if ("ADMIN".equalsIgnoreCase(user.getRole())) {
                 response.sendRedirect("/admin/adminPage.jsp");
-                System.out.println("Redirection vers le tableau de bord admin pour : " + user.getEmail());
             } else {
                 response.sendRedirect("LandingPage.jsp");
-                System.out.println("Redirection vers la page d'accueil pour : " + user.getEmail());
             }
 
         } catch (SQLException e) {

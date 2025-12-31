@@ -11,8 +11,11 @@ public class User {
     private String role; // ADMIN ou USER
     private boolean isVerified; // false par défaut
     private String verificationCode;
+    private String phoneNumber;
+    private String address;
+    private String status = "PENDING"; // ✅ valeur par défaut
 
-    // Constructeur complet
+    // Constructeur signup + vérification
     public User(String name, String email, String password, String role, boolean isVerified, String verificationCode) {
         this.name = name;
         this.email = email;
@@ -22,25 +25,44 @@ public class User {
         this.verificationCode = verificationCode;
     }
 
+    // Constructeur DAO (DB → Object)
+    public User(String name, String email, String password, String phoneNumber, String address, String role) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.role = role;
+    }
+
+    // Constructeur simple
     public User(String name, String email, String password, String role) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
-
     }
 
-    // Constructeur pour login (email + password)
+    // Constructeur login
     public User(String email, String password) {
         this.email = email;
         this.password = password;
+    }
+
+    //constructeur pour admin
+    public User(String name, String email, String phoneNumber, String address, String password) {
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.password= password;
     }
 
     // Getters & Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
-    public String getName() { return name; }
+    public String getFullName() { return name; }
     public void setName(String name) { this.name = name; }
 
     public String getEmail() { return email; }
@@ -57,4 +79,14 @@ public class User {
 
     public String getVerificationCode() { return verificationCode; }
     public void setVerificationCode(String verificationCode) { this.verificationCode = verificationCode; }
+
+    public String getPhoneNumber() { return phoneNumber; }
+public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+
+public String getAddress() { return address; }
+public void setAddress(String address) { this.address = address; }
+
+public String getStatus() { return status; }
+public void setStatus(String status) { this.status = status; }
+
 }
