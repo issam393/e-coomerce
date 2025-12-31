@@ -15,9 +15,6 @@ CREATE TABLE `users` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-LOCK TABLES `users` WRITE;
-INSERT INTO `users` VALUES (1,'test@example.com','Test User','test123','USER','ACTIVE','CLIENT','PENDING',0,'2025-12-30 23:41:23');
-UNLOCK TABLES;
 
 -- 2. PRODUCTS TABLE
 DROP TABLE IF EXISTS `products`;
