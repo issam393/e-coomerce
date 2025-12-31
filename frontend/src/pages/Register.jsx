@@ -94,6 +94,7 @@ const Regiter = () => {
             />
             <FaEnvelope className="input-icon" />
           </div>
+          
           <div className="input-box">
             <input 
               type="password" 
