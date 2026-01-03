@@ -68,4 +68,13 @@ public class CartDAO {
             stmt.executeUpdate();
         } catch (SQLException e) { e.printStackTrace(); }
     }
+    public void updateCartItemQuantity(int cartItemId, int quantity) {
+        String sql = "UPDATE cart_items SET quantity = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, quantity);
+            stmt.setInt(2, cartItemId);
+            stmt.executeUpdate();
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
 }

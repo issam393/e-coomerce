@@ -1,5 +1,5 @@
 package com.ecommerce.model;
-
+import java.util.Date;
 import java.util.List;
 
 public class Order {
@@ -8,6 +8,8 @@ public class Order {
     private int userId;
     private double totalPrice;
     private String status; // PENDING, PAID, SHIPPED
+    private Date orderDate;
+    private User user; 
     private List<OrderItem> items;
 
     public Order() {}
@@ -34,4 +36,8 @@ public class Order {
 
     public List<OrderItem> getItems() { return items; }
     public void setItems(List<OrderItem> items) { this.items = items; }
+    public Date getOrderDate() { return orderDate; }
+    public void setOrderDate(Date orderDate) { this.orderDate = orderDate; }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 }

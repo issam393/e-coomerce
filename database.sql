@@ -24,6 +24,8 @@ CREATE TABLE `products` (
   `old_price` DECIMAL(10,2) DEFAULT 0.00,
   `stock` INT DEFAULT 0,
   `category` VARCHAR(50),
+  `rate` DECIMAL(2,1) DEFAULT 0.0,
+  `number_of_reviews` INT DEFAULT 0,
   `image` VARCHAR(255),
   `sizes` VARCHAR(255),  -- Stores "S,M,L" as string
   `colors` VARCHAR(255), -- Stores "Red,Blue" as string
@@ -64,4 +66,18 @@ CREATE TABLE `order_items` (
   `price` DECIMAL(10,2) NOT NULL,
   FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`) ON DELETE CASCADE,
   FOREIGN KEY (`product_id`) REFERENCES `products`(`id`)
+);
+
+
+CREATE TABLE `wilaya`(
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(100) NOT NULL,
+  `price` DECIMAL(10,2) NOT NULL
+);
+
+CREATE TABLE `commune`(
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(100) NOT NULL,
+  `wilaya_id` INT,
+  FOREIGN KEY (`wilaya_id`) REFERENCES `wilaya`(`id`)
 );

@@ -68,5 +68,29 @@ public class ProductController extends HttpServlet {
         out.print("{\"success\":true, \"message\":\"Produit mis à jour avec succès\"}");
         out.flush();
     }
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+
+        try {
+            String idParam = request.getParameter("id");
+            if (idParam == null) {
+                response.setStatus(400);
+                out.print("{\"success\":false, \"message\":\"ID manquant\"}");
+                return;
+            }
+
+            int id = Integer.parseInt(idParam);
+            productDAO.deleteProduct(id);
+
+            out.print("{\"success\":true, \"message\":\"Produit supprimé avec succès\"}");
+        } catch (Exception e) {
+            response.setStatus(500);
+            out.print("{\"success\":false, \"message\":\"Erreur serveur\"}");
+        }
+        out.flush();
+    }
    
 }
