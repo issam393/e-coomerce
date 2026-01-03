@@ -57,7 +57,7 @@ const Register = () => {
         params.append('password', formData.password);
         params.append('phone', formData.phone);     // ✅ Required by Backend
         params.append('address', formData.address); // ✅ Required by Backend
-
+        console.log("Signup Params:", params.toString());
         const response = await api.post('/signup', params);
         if (response.data.success) {
            alert("Registration successful! Check server console for code.");

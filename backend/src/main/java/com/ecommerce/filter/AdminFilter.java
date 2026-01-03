@@ -37,7 +37,7 @@ public class AdminFilter implements Filter {
         // ---------------------------------------------------------
         boolean isPublic = 
             path.equals("/login") || 
-            path.equals("/register") || 
+            path.equals("/signup") || 
             path.equals("/logout") ||
             // Allow anyone to VIEW products or locations
             ((path.equals("/products") || path.equals("/locations")) && method.equals("GET"));
