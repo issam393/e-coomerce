@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class DBConnection {
 
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/ecommerce?useSSL=false&serverTimezone=UTC";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/issam";
     private static final String USER = "root";
-    private static final String PASS = "CHANGE_ME"; // 🔐 à externaliser
+    private static final String PASS = "0000"; // 🔐 à externaliser
 
     static {
         try {

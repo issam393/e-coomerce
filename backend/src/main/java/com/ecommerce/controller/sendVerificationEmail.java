@@ -17,8 +17,8 @@ import javax.mail.internet.MimeMessage;
 public class sendVerificationEmail { // ✅ NOM DE CLASSE CORRIGÉ (Java convention)
 
     // ❗ À METTRE DANS DES VARIABLES D'ENV EN PROD
-    private static final String SENDER_EMAIL = "exemple@gmail.com"; 
-    private static final String SENDER_PASSWORD = "xxxx xxxx xxxx xxxx"; 
+    private static final String SENDER_EMAIL = "testingemailjavawalid@gmail.com"; 
+    private static final String SENDER_PASSWORD = "oasl kodn wojl tfij"; 
 
     /**
      * Envoie un email

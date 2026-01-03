@@ -1,6 +1,7 @@
 package com.ecommerce.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import com.ecommerce.dao.UserDAO;
 import com.ecommerce.model.User;
@@ -13,7 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 /**
- * Servlet pour gérer la vérification du compte utilisateur
+ * Servlet pour gérer la vérification du compte utilisateur (API JSON)
  */
 @WebServlet("/verify")
 public class VerificationServlet extends HttpServlet {
@@ -29,52 +30,70 @@ public class VerificationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // ✅ Code saisi par l'utilisateur
+        // ✅ 1. Set response to JSON
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+
+        // ✅ 2. Get the code sent by React
         String inputCode = request.getParameter("verificationCode");
 
-        HttpSession session = request.getSession(false); // ✅ éviter créer une session inutile
+        // ✅ 3. Retrieve Session
+        HttpSession session = request.getSession(false);
         if (session == null) {
-            response.sendRedirect("signup.jsp");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"success\":false, \"message\":\"Session expirée. Veuillez vous réinscrire.\"}");
+            out.flush();
             return;
         }
 
-        // ✅ Utilisateur temporaire stocké après signup
-        User tempUser = (User) session.getAttribute("verificationUser"); // 🔁 NOM CORRIGÉ
+        // ✅ 4. Retrieve Temporary User (Stored by SignupServlet)
+        User tempUser = (User) session.getAttribute("verificationUser");
 
-        if (tempUser == null || inputCode == null || inputCode.isEmpty()) {
-            response.sendRedirect("VerificationCode/VerificationPage.jsp?error=invalid");
+        if (tempUser == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"success\":false, \"message\":\"Aucune inscription en cours trouvée.\"}");
+            out.flush();
             return;
         }
 
-        System.out.println("Code entré : " + inputCode);
-        System.out.println("Code attendu : " + tempUser.getVerificationCode());
+        if (inputCode == null || inputCode.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"success\":false, \"message\":\"Le code de vérification est manquant.\"}");
+            out.flush();
+            return;
+        }
 
-        // ✅ Vérification du code
+        // ✅ 5. Verify Code
         if (tempUser.getVerificationCode().equals(inputCode)) {
 
-            tempUser.setVerified(true);              // ✅ compte vérifié
-            tempUser.setStatus("ACTIVE");            // ✅ activation du compte
-
             try {
-                // ✅ Sauvegarde définitive en base
+                // Update User Status
+                tempUser.setVerified(true);
+                tempUser.setStatus("ACTIVE");
+
+                // ✅ 6. Save User to Database
                 userDAO.saveUser(tempUser);
 
-                // ✅ Création de la session utilisateur finale
-                session.setAttribute("email", tempUser.getEmail());
-                session.setAttribute("role", tempUser.getRole());
-
-                // ✅ Nettoyage de la session temporaire
+                // ✅ 7. Clean up Session (Remove temp user)
                 session.removeAttribute("verificationUser");
 
-                response.sendRedirect("LandingPage.jsp");
+                // ✅ 8. Return Success JSON
+                // Note: We do NOT log them in here. They must go to /login to get a JWT.
+                out.print("{\"success\":true, \"message\":\"Compte vérifié avec succès !\"}");
+                out.flush();
 
             } catch (Exception e) {
-                throw new ServletException("Erreur lors de la vérification du compte", e);
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                out.print("{\"success\":false, \"message\":\"Erreur base de données lors de la validation.\"}");
+                e.printStackTrace();
             }
 
         } else {
-            // ❌ Code incorrect
-            response.sendRedirect("VerificationCode/VerificationPage.jsp?error=code");
+            // ❌ Code Incorrect
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request
+            out.print("{\"success\":false, \"message\":\"Code de vérification incorrect.\"}");
+            out.flush();
         }
     }
 }

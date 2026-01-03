@@ -1,98 +1,67 @@
--- 1. USERS TABLE
+-- 1. USERS
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) NOT NULL,
-  `full_name` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `phone_number` varchar(20) NOT NULL,
-  `address` text NOT NULL,
-  `role` enum('CLIENT','ADMIN') DEFAULT 'CLIENT',
-  `status` enum('ACTIVE','BLOCKED','PENDING') DEFAULT 'PENDING',
-  `email_verified` tinyint(1) DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(100) UNIQUE NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `phone_number` VARCHAR(20),
+  `address` TEXT,
+  `role` VARCHAR(20) DEFAULT 'USER', -- 'USER' or 'ADMIN'
+  `status` VARCHAR(20) DEFAULT 'PENDING', -- 'PENDING', 'ACTIVE', 'BLOCKED'
+  `is_verified` BOOLEAN DEFAULT FALSE,
+  `verification_code` VARCHAR(10),
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
-
--- 2. PRODUCTS TABLE
+-- 2. PRODUCTS
 DROP TABLE IF EXISTS `products`;
 CREATE TABLE `products` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `price` decimal(10,2) NOT NULL,
-  `rate` decimal(2,1) DEFAULT '0.0',
-  `category` enum('VETEMENT','ELECTRONIQUE','MEUBLE','Shorts') NOT NULL,
-  `stock` int DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `taille` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL,
+  `description` TEXT,
+  `price` DECIMAL(10,2) NOT NULL,
+  `old_price` DECIMAL(10,2) DEFAULT 0.00,
+  `stock` INT DEFAULT 0,
+  `category` VARCHAR(50),
+  `image` VARCHAR(255),
+  `sizes` VARCHAR(255),  -- Stores "S,M,L" as string
+  `colors` VARCHAR(255), -- Stores "Red,Blue" as string
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
--- 3. CARTS TABLE
-DROP TABLE IF EXISTS `carts`;
-CREATE TABLE `carts` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `user_id` (`user_id`),
-  CONSTRAINT `carts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- 4. CART_ITEMS TABLE
+-- 3. CART ITEMS
 DROP TABLE IF EXISTS `cart_items`;
 CREATE TABLE `cart_items` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `cart_id` bigint DEFAULT NULL,
-  `product_id` bigint DEFAULT NULL,
-  `quantity` int NOT NULL,
-  `size` varchar(10) NOT NULL,
-  `color` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `cart_id` (`cart_id`),
-  KEY `product_id` (`product_id`),
-  CONSTRAINT `cart_items_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `carts` (`id`),
-  CONSTRAINT `cart_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `user_id` INT NOT NULL,
+  `product_id` INT NOT NULL,
+  `quantity` INT DEFAULT 1,
+  `size` VARCHAR(20),
+  `color` VARCHAR(50),
+  FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`product_id`) REFERENCES `products`(`id`) ON DELETE CASCADE
+);
 
--- 5. ORDERS TABLE
+-- 4. ORDERS
 DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `user_id` bigint DEFAULT NULL,
-  `total` decimal(10,2) DEFAULT NULL,
-  `status` enum('PENDING','PAID','SHIPPED','DELIVERED') DEFAULT 'PENDING',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `user_id` INT NOT NULL,
+  `total_price` DECIMAL(10,2) NOT NULL,
+  `status` VARCHAR(20) DEFAULT 'PENDING', -- PENDING, PAID, SHIPPED
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
+);
 
--- 6. ORDER_ITEMS TABLE
+-- 5. ORDER ITEMS
 DROP TABLE IF EXISTS `order_items`;
 CREATE TABLE `order_items` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `order_id` bigint DEFAULT NULL,
-  `product_id` bigint DEFAULT NULL,
-  `quantity` int DEFAULT NULL,
-  `price` decimal(10,2) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `order_id` (`order_id`),
-  KEY `product_id` (`product_id`),
-  CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
-  CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- 7. EMAIL_VERIFICATION_CODES TABLE
-DROP TABLE IF EXISTS `email_verification_codes`;
-CREATE TABLE `email_verification_codes` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `user_id` bigint DEFAULT NULL,
-  `code` varchar(10) DEFAULT NULL,
-  `expires_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `email_verification_codes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `order_id` INT NOT NULL,
+  `product_id` INT NOT NULL,
+  `quantity` INT NOT NULL,
+  `price` DECIMAL(10,2) NOT NULL,
+  FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`product_id`) REFERENCES `products`(`id`)
+);

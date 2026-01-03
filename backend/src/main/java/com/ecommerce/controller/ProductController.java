@@ -27,15 +27,13 @@ public class ProductController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
 
-        String name = request.getParameter("name");
-        if (name != null && !name.isEmpty()) {
-            Product product = productDAO.getProductByName(name);
-            if (product != null) {
-                out.print(gson.toJson(product));
-            } else {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                out.print("{\"error\":\"Produit non trouvé\"}");
-            }
+        String idParam = request.getParameter("id");
+
+        if (idParam != null) {
+            // Fetch single product by ID
+            int id = Integer.parseInt(idParam);
+            Product product = productDAO.getProductById(id);
+            out.print(gson.toJson(product));
         } else {
             List<Product> products = productDAO.getAllProducts();
             out.print(gson.toJson(products));
