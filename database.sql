@@ -24,8 +24,6 @@ CREATE TABLE `products` (
   `old_price` DECIMAL(10,2) DEFAULT 0.00,
   `stock` INT DEFAULT 0,
   `category` VARCHAR(50),
-  `rate` DECIMAL(2,1) DEFAULT 0.0,
-  `number_of_reviews` INT DEFAULT 0,
   `image` VARCHAR(255),
   `sizes` VARCHAR(255),  -- Stores "S,M,L" as string
   `colors` VARCHAR(255), -- Stores "Red,Blue" as string

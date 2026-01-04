@@ -491,12 +491,115 @@ function Admin() {
         <div className="profile-overlay">
           <div className="profile-modal">
             <div className="profile-header"><h2>{showEditProduct ? "Modifier Produit" : "Ajouter Produit"}</h2><button onClick={() => { setShowAddProduct(false); setShowEditProduct(false); }} className="close-button"><IoMdClose /></button></div>
+
             <form className="add-product-form" onSubmit={submitProductForm}>
-              <div className="form-group"><label>Nom</label><input type="text" value={productForm.name} onChange={e => setProductForm({...productForm, name: e.target.value})} required /></div>
-              <div className="prix"><div className="form-group"><label>Prix</label><input type="number" value={productForm.price} onChange={e => setProductForm({...productForm, price: e.target.value})} required /></div><div className="form-group"><label>Stock</label><input type="number" value={productForm.stock} onChange={e => setProductForm({...productForm, stock: e.target.value})} required /></div></div>
-              <div className="form-group"><label>Catégorie</label><select value={productForm.category} onChange={e => setProductForm({...productForm, category: e.target.value})}><option value="Hoodies">Hoodies</option><option value="Vêtements">Vêtements</option><option value="Électronique">Électronique</option><option value="Meubles">Meubles</option><option value="Shorts & Bas">Shorts & Bas</option></select></div>
-              <div className="form-group"><label>Description</label><textarea value={productForm.description} onChange={e => setProductForm({...productForm, description: e.target.value})}></textarea></div>
-              <div className="profile-footer"><button type="submit" className="close-btn">{showEditProduct ? "Sauvegarder" : "Ajouter"}</button></div>
+              
+              {/* Name */}
+              <div className="form-group">
+                <label>Nom du produit</label>
+                <input 
+                  type="text" 
+                  value={productForm.name} 
+                  onChange={e => setProductForm({...productForm, name: e.target.value})} 
+                  required 
+                />
+              </div>
+
+              {/* Prices */}
+              <div className="prix">
+                <div className="form-group">
+                  <label>Prix Actuel (DA)</label>
+                  <input 
+                    type="number" 
+                    value={productForm.price} 
+                    onChange={e => setProductForm({...productForm, price: parseFloat(e.target.value) || 0})} 
+                    required 
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Ancien Prix (DA) <small>(Optionnel)</small></label>
+                  <input 
+                    type="number" 
+                    value={productForm.oldPrice} 
+                    onChange={e => setProductForm({...productForm, oldPrice: parseFloat(e.target.value) || 0})} 
+                  />
+                </div>
+              </div>
+
+              {/* Stock & Category */}
+              <div className="prix">
+                <div className="form-group">
+                  <label>Stock</label>
+                  <input 
+                    type="number" 
+                    value={productForm.stock} 
+                    onChange={e => setProductForm({...productForm, stock: parseInt(e.target.value) || 0})} 
+                    required 
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Catégorie</label>
+                  <select 
+                    value={productForm.category} 
+                    onChange={e => setProductForm({...productForm, category: e.target.value})}
+                  >
+                    <option value="Hoodies">Hoodies</option>
+                    <option value="Vêtements">Vêtements</option>
+                    <option value="Électronique">Électronique</option>
+                    <option value="Meubles">Meubles</option>
+                    <option value="Shorts & Bas">Shorts & Bas</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Image URL */}
+              <div className="form-group">
+                <label>URL de l'image</label>
+                <input 
+                  type="text" 
+                  placeholder="http://..."
+                  value={productForm.image} 
+                  onChange={e => setProductForm({...productForm, image: e.target.value})} 
+                />
+              </div>
+
+              {/* Sizes & Colors */}
+              <div className="prix">
+                <div className="form-group">
+                  <label>Tailles (séparées par virgule)</label>
+                  <input 
+                    type="text" 
+                    placeholder="S,M,L,XL"
+                    value={productForm.sizes} 
+                    onChange={e => setProductForm({...productForm, sizes: e.target.value})} 
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Couleurs (séparées par virgule)</label>
+                  <input 
+                    type="text" 
+                    placeholder="Rouge,Bleu,Noir"
+                    value={productForm.colors} 
+                    onChange={e => setProductForm({...productForm, colors: e.target.value})} 
+                  />
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="form-group">
+                <label>Description</label>
+                <textarea 
+                  rows="3"
+                  value={productForm.description} 
+                  onChange={e => setProductForm({...productForm, description: e.target.value})}
+                ></textarea>
+              </div>
+
+              <div className="profile-footer">
+                <button type="submit" className="close-btn">
+                  {showEditProduct ? "Sauvegarder" : "Ajouter"}
+                </button>
+              </div>
             </form>
           </div>
         </div>

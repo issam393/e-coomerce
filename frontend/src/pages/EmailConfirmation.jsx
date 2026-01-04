@@ -54,11 +54,11 @@ const EmailConfirmation = () => {
         }
 
         setIsLoading(true);
-
+        console.log("here");
         try {
             const params = new URLSearchParams();
             params.append('verificationCode', fullCode);
-
+            params.append('email', userEmail); 
             const response = await api.post('/verify', params);
 
             if (response.data.success) {
@@ -71,6 +71,30 @@ const EmailConfirmation = () => {
         } finally {
             setIsLoading(false);
         }
+    };
+    const handleResend = async () => {
+        // form urlencoded body
+
+        const params = new URLSearchParams();
+        params.append('email', userEmail);
+        const response = await fetch('http://localhost:9000/resend', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: params.toString(),
+        });
+
+        console.log(userEmail);
+        const data = await response.json();
+        if (data.success)
+        {
+            showNotification("success", "Envoyé", "Nouveau code envoyé");
+
+        } else {
+            showNotification("error", "Erreur", data.message || "Échec de l'envoi du code.");
+        }
+
     };
 
     return (
@@ -146,7 +170,7 @@ const EmailConfirmation = () => {
                         {/* Resend Section */}
                         <div className="resend-section">
                             <p className="resend-text">Vous n'avez pas reçu le code ?</p>
-                            <button className="resend-action-button" onClick={() => showNotification("success", "Envoyé", "Nouveau code envoyé")}>
+                            <button className="resend-action-button" onClick={handleResend}>
                                 <FaRedo /> Renvoyer le code
                             </button>
                         </div>

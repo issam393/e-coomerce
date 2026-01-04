@@ -20,9 +20,7 @@ createRoot(document.getElementById('root')).render(
         <Route path='/Dashboard' element={<Dashboard />}/>
         <Route path='/Products' element={<Products />}/>
         <Route path='/Product/:id' element={<ProductDetails />}/>
-        <Route element={<AdminRoute />}>
-            <Route path="/admin" element={<Admin />} />
-        </Route>
+          <Route path="/admin" element={<Admin />} />
         <Route path='/EmailConfirmation' element={<EmailConfirmation />}/>
       </Routes>
     </BrowserRouter>

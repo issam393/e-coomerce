@@ -22,78 +22,61 @@ public class VerificationServlet extends HttpServlet {
     private UserDAO userDAO;
 
     @Override
-    public void init() {
-        userDAO = new UserDAO();
-    }
+    public void init() { userDAO = new UserDAO(); }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
 
-        // ✅ 1. Set response to JSON
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json; charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        // ✅ 2. Get the code sent by React
+        // ✅ REQUIRE BOTH EMAIL AND CODE
+        String email = request.getParameter("email");
         String inputCode = request.getParameter("verificationCode");
 
-        // ✅ 3. Retrieve Session
-        HttpSession session = request.getSession(false);
-        if (session == null) {
+        if (email == null || inputCode == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            out.print("{\"success\":false, \"message\":\"Session expirée. Veuillez vous réinscrire.\"}");
-            out.flush();
+            out.print("{\"success\":false, \"message\":\"Email et Code requis.\"}");
             return;
         }
 
-        // ✅ 4. Retrieve Temporary User (Stored by SignupServlet)
-        User tempUser = (User) session.getAttribute("verificationUser");
+        try {
+            // ✅ 1. Find User by Email from DB
+            User user = userDAO.findByEmail(email);
 
-        if (tempUser == null) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            out.print("{\"success\":false, \"message\":\"Aucune inscription en cours trouvée.\"}");
-            out.flush();
-            return;
-        }
-
-        if (inputCode == null || inputCode.isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            out.print("{\"success\":false, \"message\":\"Le code de vérification est manquant.\"}");
-            out.flush();
-            return;
-        }
-
-        // ✅ 5. Verify Code
-        if (tempUser.getVerificationCode().equals(inputCode)) {
-
-            try {
-                // Update User Status
-                tempUser.setVerified(true);
-                tempUser.setStatus("ACTIVE");
-
-                // ✅ 6. Save User to Database
-                userDAO.saveUser(tempUser);
-
-                // ✅ 7. Clean up Session (Remove temp user)
-                session.removeAttribute("verificationUser");
-
-                // ✅ 8. Return Success JSON
-                // Note: We do NOT log them in here. They must go to /login to get a JWT.
-                out.print("{\"success\":true, \"message\":\"Compte vérifié avec succès !\"}");
-                out.flush();
-
-            } catch (Exception e) {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                out.print("{\"success\":false, \"message\":\"Erreur base de données lors de la validation.\"}");
-                e.printStackTrace();
+            if (user == null) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.print("{\"success\":false, \"message\":\"Utilisateur introuvable.\"}");
+                return;
             }
 
-        } else {
-            // ❌ Code Incorrect
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request
-            out.print("{\"success\":false, \"message\":\"Code de vérification incorrect.\"}");
-            out.flush();
+            // ✅ 2. Check if already verified
+            if (user.isVerified()) {
+                out.print("{\"success\":true, \"message\":\"Compte déjà vérifié.\"}");
+                return;
+            }
+
+            // ✅ 3. Validate Code
+            if (user.getVerificationCode().equals(inputCode)) {
+                
+                user.setVerified(true);
+                user.setStatus("ACTIVE");
+                user.setVerificationCode(null); // Clear the code for security
+                
+                // Update DB
+                userDAO.updateUser(user); // You need an 'update' method in DAO
+
+                out.print("{\"success\":true, \"message\":\"Compte vérifié !\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.print("{\"success\":false, \"message\":\"Code incorrect.\"}");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.print("{\"success\":false, \"message\":\"Erreur serveur.\"}");
         }
     }
 }

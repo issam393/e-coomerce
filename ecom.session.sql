@@ -5,7 +5,7 @@ SELECT * FROM order_items;
 SELECT * FROM cart_items;
 
 --@block
-DELETE FROM users WHERE email = "4ce010@gmail.com";
+DELETE FROM users WHERE email = "walidchemat@gmail.com";
 
 --@block
 SELECT * FROM wilaya;
